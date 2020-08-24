@@ -1,0 +1,18 @@
+name: assets_generator
+description: assets_generator helps you generate assets path constants to r.dart file, you can preview the images assets by hovering over the constants.
+version: 1.0.0
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  build: ^1.2.2
+  path: ^1.6.4
+  glob: ^1.2.0
+  analyzer: ^0.39.4
+  yaml: ^2.2.0
+  meta: ^1.1.8
+
+dev_dependencies:
+  test: ^1.14.2
+  build_test: ^0.10.12+1
