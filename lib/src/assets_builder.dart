@@ -143,10 +143,10 @@ class AssetsBuilder extends Builder {
                     assetPath.indexOf("/") + 1, assetPath.lastIndexOf("."))
                 .replaceAll('/', '_');
             if (options.ignorePathInName) {
-              propertyName = assetPath
+              var shortPath = assetPath.replaceAll(options.path, '');
+              propertyName = shortPath
                   .substring(
-                      assetPath.indexOf("/") + 1, assetPath.lastIndexOf("."))
-                  .replaceAll(options.path, '')
+                      shortPath.indexOf("/") + 1, shortPath.lastIndexOf("."))
                   .replaceAll('/', '_');
             }
 
@@ -164,11 +164,11 @@ class AssetsBuilder extends Builder {
               .substring(assetPath.indexOf("/") + 1, assetPath.lastIndexOf("."))
               .replaceAll('/', '_');
           if (options.ignorePathInName) {
-            propertyName = assetPath
-                  .substring(
-                      assetPath.indexOf("/") + 1, assetPath.lastIndexOf("."))
-                  .replaceAll(options.path, '')
-                  .replaceAll('/', '_');
+            var shortPath = assetPath.replaceAll(options.path, '');
+            propertyName = shortPath
+                .substring(
+                    shortPath.indexOf("/") + 1, shortPath.lastIndexOf("."))
+                .replaceAll('/', '_');
           }
 
           if (propertyName.isNotEmpty) {
