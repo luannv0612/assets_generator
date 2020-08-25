@@ -20,7 +20,7 @@ class _AssetsScannerOptions {
         path: map["path"] ?? "lib",
         className: map["className"] ?? "R",
         ignoreComment: map["ignoreComment"] ?? false,
-        ignorePathInName: map["ignorePathInName"] ?? false);
+        ignorePathInName: map["ignorePathInName"] ?? true);
   }
 
   /// The path where the `r.dart` file locate. Note that the `path` should be
