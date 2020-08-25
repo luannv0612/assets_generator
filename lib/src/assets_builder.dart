@@ -10,7 +10,10 @@ import 'package:yaml/yaml.dart';
 
 class _AssetsScannerOptions {
   const _AssetsScannerOptions._(
-      {this.path = "lib", this.className = "R", this.ignoreComment = false, this.ignorePathInName = true});
+      {this.path = "lib",
+      this.className = "R",
+      this.ignoreComment = false,
+      this.ignorePathInName = true});
   factory _AssetsScannerOptions() => _AssetsScannerOptions._();
   factory _AssetsScannerOptions.fromYamlMap(YamlMap map) {
     return _AssetsScannerOptions._(
@@ -140,11 +143,11 @@ class AssetsBuilder extends Builder {
                     assetPath.indexOf("/") + 1, assetPath.lastIndexOf("."))
                 .replaceAll('/', '_');
             if (options.ignorePathInName) {
-              var assetPathIgnorePath = assetPath.replaceAll(options.path, '');
-              propertyName = assetPathIgnorePath
-                .substring(
-                    assetPath.indexOf("/") + 1, assetPath.lastIndexOf("."))
-                .replaceAll('/', '_');
+              propertyName = assetPath
+                  .substring(
+                      assetPath.indexOf("/") + 1, assetPath.lastIndexOf("."))
+                  .replaceAll(options.path, '')
+                  .replaceAll('/', '_');
             }
 
             if (propertyName.isNotEmpty) {
@@ -158,16 +161,15 @@ class AssetsBuilder extends Builder {
           }
         } else {
           String propertyName = assetPath
-                .substring(
-                    assetPath.indexOf("/") + 1, assetPath.lastIndexOf("."))
-                .replaceAll('/', '_');
-            if (options.ignorePathInName) {
-              var assetPathIgnorePath = assetPath.replaceAll(options.path, '');
-              propertyName = assetPathIgnorePath
-                .substring(
-                    assetPath.indexOf("/") + 1, assetPath.lastIndexOf("."))
-                .replaceAll('/', '_');
-            }
+              .substring(assetPath.indexOf("/") + 1, assetPath.lastIndexOf("."))
+              .replaceAll('/', '_');
+          if (options.ignorePathInName) {
+            propertyName = assetPath
+                  .substring(
+                      assetPath.indexOf("/") + 1, assetPath.lastIndexOf("."))
+                  .replaceAll(options.path, '')
+                  .replaceAll('/', '_');
+          }
 
           if (propertyName.isNotEmpty) {
             if (!options.ignoreComment) {
