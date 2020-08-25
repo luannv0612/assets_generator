@@ -10,13 +10,14 @@ import 'package:yaml/yaml.dart';
 
 class _AssetsScannerOptions {
   const _AssetsScannerOptions._(
-      {this.path = "lib", this.className = "R", this.ignoreComment = false});
+      {this.path = "lib", this.className = "R", this.ignoreComment = false, this.ignorePathInName = true});
   factory _AssetsScannerOptions() => _AssetsScannerOptions._();
   factory _AssetsScannerOptions.fromYamlMap(YamlMap map) {
     return _AssetsScannerOptions._(
         path: map["path"] ?? "lib",
         className: map["className"] ?? "R",
-        ignoreComment: map["ignoreComment"] ?? false);
+        ignoreComment: map["ignoreComment"] ?? false,
+        ignorePathInName: map["ignorePathInName"] ?? false);
   }
 
   /// The path where the `r.dart` file locate. Note that the `path` should be
@@ -30,9 +31,11 @@ class _AssetsScannerOptions {
   /// preview the images assets if `ignoreComment` is `true`.
   final bool ignoreComment;
 
+  final bool ignorePathInName;
+
   @override
   String toString() =>
-      "_AssetsScannerOptions(path: $path, className: $className, ignoreComment: $ignoreComment)";
+      "_AssetsScannerOptions(path: $path, className: $className, ignoreComment: $ignoreComment, ignorePathInName: $ignorePathInName)";
 }
 
 @visibleForOverriding
@@ -130,17 +133,50 @@ class AssetsBuilder extends Builder {
       assetPathsClass.writeln();
       assetPaths.forEach((assetPath) {
         // Ignore the parent path to make the property name shorter.
-        String propertyName = assetPath
-            .substring(assetPath.indexOf("/") + 1, assetPath.lastIndexOf("."))
-            .replaceAll('/', '_') + "test";
+        if (options.path != null) {
+          if (assetPath.contains(options.path)) {
+            String propertyName = assetPath
+                .substring(
+                    assetPath.indexOf("/") + 1, assetPath.lastIndexOf("."))
+                .replaceAll('/', '_');
+            if (options.ignorePathInName) {
+              var assetPathIgnorePath = assetPath.replaceAll(options.path, '');
+              propertyName = assetPathIgnorePath
+                .substring(
+                    assetPath.indexOf("/") + 1, assetPath.lastIndexOf("."))
+                .replaceAll('/', '_');
+            }
 
-        if (propertyName.isNotEmpty) {
-          if (!options.ignoreComment) {
-            assetPathsClass.writeln("  /// ![](${p.absolute(assetPath)})");
+            if (propertyName.isNotEmpty) {
+              if (!options.ignoreComment) {
+                assetPathsClass.writeln("  /// ![](${p.absolute(assetPath)})");
+              }
+              assetPathsClass
+                  .writeln("  static const $propertyName = \"${assetPath}\";");
+              assetPathsClass.writeln();
+            }
           }
-          assetPathsClass
-              .writeln("  static const $propertyName = \"${assetPath}\";");
-          assetPathsClass.writeln();
+        } else {
+          String propertyName = assetPath
+                .substring(
+                    assetPath.indexOf("/") + 1, assetPath.lastIndexOf("."))
+                .replaceAll('/', '_');
+            if (options.ignorePathInName) {
+              var assetPathIgnorePath = assetPath.replaceAll(options.path, '');
+              propertyName = assetPathIgnorePath
+                .substring(
+                    assetPath.indexOf("/") + 1, assetPath.lastIndexOf("."))
+                .replaceAll('/', '_');
+            }
+
+          if (propertyName.isNotEmpty) {
+            if (!options.ignoreComment) {
+              assetPathsClass.writeln("  /// ![](${p.absolute(assetPath)})");
+            }
+            assetPathsClass
+                .writeln("  static const $propertyName = \"${assetPath}\";");
+            assetPathsClass.writeln();
+          }
         }
       });
       assetPathsClass.writeln(ignoreForFile);
