@@ -132,7 +132,7 @@ class AssetsBuilder extends Builder {
         // Ignore the parent path to make the property name shorter.
         String propertyName = assetPath
             .substring(assetPath.indexOf("/") + 1, assetPath.lastIndexOf("."))
-            .replaceAll('/', '_');
+            .replaceAll('/', '_') + "test";
 
         if (propertyName.isNotEmpty) {
           if (!options.ignoreComment) {
